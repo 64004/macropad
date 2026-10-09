@@ -8,8 +8,9 @@ jobs:
     - name: Checkout custom config
       uses: actions/checkout@v3
 
-    - name: Run Vial Build Action
-      uses: vial-kb/vial-action@v2
+    - name: Run QMK Build Action
+      uses: qmk/qmk-action@v4
       with:
+        playlist: 'vial'
         keyboard: 'handwired/macro3enc'
         keymap: 'default'
