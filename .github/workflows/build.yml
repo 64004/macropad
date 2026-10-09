@@ -1,0 +1,15 @@
+name: Build Vial Firmware
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout custom config
+      uses: actions/checkout@v3
+
+    - name: Run Vial Build Action
+      uses: vial-kb/vial-action@v2
+      with:
+        keyboard: 'handwired/macro3enc'
+        keymap: 'default'
