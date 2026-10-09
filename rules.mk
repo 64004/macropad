@@ -1,0 +1,5 @@
+MCU = atmega32u4
+BOOTLOADER = caterina
+VIAL_ENABLE = yes
+ENCODER_ENABLE = yes
+ENCODER_MAP_ENABLE = yes
