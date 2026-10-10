@@ -10,18 +10,29 @@ jobs:
       with:
         path: macro3enc
 
-    - name: Setup QMK firmware environment
+    - name: Set up QMK CLI and dependencies
       run: |
-        mkdir -p keyboards/handwired
-        mv macro3enc keyboards/handwired/macro3enc
+        sudo msgformat --version || sudo apt-get update && sudo apt-get install -y gettext python3-pip
+        python3 -m pip install qmk
 
-    - name: Compile inside Vial Docker
-      uses: docker://vialkb/vial-qmk:latest
-      with:
-        args: qmk compile -kb handwired/macro3enc -km default
+    - name: Clone Vial Repository (Lightweight)
+      run: |
+        git clone --depth 1 --branch vial https://github.com vial
+        cd vial
+        make git-submodule
+
+    - name: Inject custom keyboard
+      run: |
+        mkdir -p vial/keyboards/handwired
+        mv macro3enc vial/keyboards/handwired/macro3enc
+
+    - name: Compile Firmware
+      run: |
+        cd vial
+        qmk compile -kb handwired/macro3enc -km default
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: macro3enc_firmware
-        path: .build/*.hex
+        path: vial/.build/*.hex
