@@ -4,12 +4,28 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: qmkfm/qmk_cli:latest
     steps:
+    - name: Disable git safe directory check
+      run: git config --global --add safe.directory '*'
+
     - name: Checkout custom config
       uses: actions/checkout@v3
-
-    - name: Run Vial Build
-      uses: vial-kb/vial-action@main
       with:
-        keyboard: 'handwired/macro3enc'
-        keymap: 'default'
+        path: keyboards/handwired/macro3enc
+
+    - name: Clone Vial repository
+      run: |
+        git clone --depth 1 --recursive https://github.com vial
+        mv keyboards/handwired/macro3enc vial/keyboards/handwired/
+
+    - name: Compile Firmware
+      run: |
+        cd vial
+        qmk compile -kb handwired/macro3enc -km default
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: macro3enc_firmware
+        path: vial/*.hex
