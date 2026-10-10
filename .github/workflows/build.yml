@@ -10,7 +10,7 @@ jobs:
       run: git config --global --add safe.directory '*'
 
     - name: Checkout custom config
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: keyboards/handwired/macro3enc
 
@@ -25,7 +25,7 @@ jobs:
         qmk compile -kb handwired/macro3enc -km default
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: macro3enc_firmware
         path: vial/*.hex
